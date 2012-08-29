@@ -1,0 +1,12 @@
+{
+    "name"                              : "classical",
+    "version"                           : "2.1",
+    "description"                       : "Functional Classical Inheritance for Javascript",
+    "keywords"                          : ["class", "inheritance"],
+    "author"                            : "Kevin Kragenbrink <kevin@writh.net>",
+    "repository" : {
+        "type"                          : "git",
+        "url"                           : "git://github.com/Writh/classical.git"
+    },
+    "main"                              : "./index"
+}
