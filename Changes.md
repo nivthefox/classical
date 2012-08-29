@@ -1,4 +1,5 @@
  * Changelog:
+ *   - 2012-08-28: Converted to NPM registry.
  *   - 2012-08-23: SuperClass assignment was still going to parent instead of super.
  *   - 2012-08-21: Added interfaces and a method of implementing them.
  *   - 2012-08-21: Renamed .parent to .super; .parent is now deprecated.

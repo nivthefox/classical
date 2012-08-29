@@ -1,5 +1,5 @@
 # Classical
-A simple cross-platform JavaScript Class provider for a classical interface to prototypal inheritance.
+A simple cross-platform functional provider of classical inheritance for Javascript.
 
 # Documentation
 ## Creating a Class
