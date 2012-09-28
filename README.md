@@ -4,31 +4,33 @@ A simple cross-platform functional provider of classical inheritance for Javascr
 # Examples
 ## Creating a Class
 ```javascript
-var Mammal = require('classical').create(function() {
-    this.name                           = null;
+require('classical');
 
-    this.constructor = function(name) {
+var Mammal = Class(function() {
+    this.name                           = Protected(null);
+
+    this.constructor = Public(function(name) {
         this.name                       = name;
-    };
+    });
 
-    this.speak = function(text) {
+    this.speak = Public(function(text) {
         console.log('%s says, "%s"', this.name, text);
-    };
+    });
 });
 ```
 
 ## Extension
 ```javascript
 var Dog = Mammal.extend(function() {
-    this.breed                          = null;
+    this.breed                          = Protected(null);
 
-    this.constructor = function(name, breed) {
+    this.constructor = Public(function(name, breed) {
         this.breed                      = breed;
-    };
+    });
 
-    this.speak = function() {
-        this.super.speak('Woof!');
-    }
+    this.speak = Public(function() {
+        this._super.speak('Woof!');
+    });
 });
 ```
 
@@ -36,14 +38,6 @@ var Dog = Mammal.extend(function() {
 ```javascript
 var Spot = new Dog('Spot', 'Dalmation');
 Spot.speak(); // Outputs: 'Spot says, "Woof!"' to the console.
-```
-
-## Interfaces
-```javascript
-var Animal = require('classical').interface(function() {
-    this.speak                          = function() {};
-});
-Mammal.implements(Animal);
 ```
 
 # API
