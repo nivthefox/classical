@@ -29,7 +29,7 @@ var Dog = Mammal.extend(function() {
     });
 
     this.speak = Public(function() {
-        this._super('Woof!');
+        this._super.speak('Woof!');
     });
 });
 ```
