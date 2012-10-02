@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-09-28
+ * @edited      2012-10-02
  * @package     Libraries
  * @see         https://github.com/writh/classical
  *
@@ -31,9 +31,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-
+(function(exports) {
 if (typeof global == 'undefined') { global = window; }
-if (typeof module == 'undefined') { module = {}; }
+if (typeof global == 'undefined') { global = {}; }
 if (typeof window == 'undefined') { window = global; }
 
 /**
@@ -209,7 +209,7 @@ var define = function(fn, _super) {
 var dereference = function(source) {
     var target;
 
-    if (typeof source == 'object') {
+    if (typeof source == 'object' && source !== null) {
         target                          = (typeof source.length == 'number') ? [] : {};
 
         for (var i in source) {
@@ -271,5 +271,7 @@ var setStatic = function(member) {
     return member;
 };
 
-module.exports                          = global.Class;
-module.exports.BaseClass                = BaseClass;
+exports                                 = global.Class;
+exports.BaseClass                       = BaseClass;
+
+})(typeof exports == 'undefined' ? this['_Class'] = {} : exports);
