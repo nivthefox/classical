@@ -32,9 +32,25 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 (function(exports) {
+var version                             = '2.0.3';
+
 if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
 if (typeof window == 'undefined') { window = global; }
+
+// Prevents loading classical twice.
+if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
+    if (typeof process.versions.classical != 'undefined') {
+        if (version !== process.versions.classical) {
+            console.error('Attempted to load classical %s, but version %s is already loaded.', version, process.versions.classical);
+        }
+
+        return;
+    }
+    else {
+        process.versions.classical      = version;
+    }
+}
 
 /**
  * Defines a new Class.
