@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-09-28
+ * @edited      2012-10-02
  * @package     Libraries
  * @see         https://github.com/writh/classical
  *
@@ -31,10 +31,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-
+(function(exports) {
+if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
-if (typeof module == 'undefined') { module = {}; }
-if (typeof window == 'undefined') { window = {}; }
+if (typeof window == 'undefined') { window = global; }
 
 /**
  * Defines a new Class.
@@ -42,7 +42,7 @@ if (typeof window == 'undefined') { window = {}; }
  * @global
  * @constructor
  */
-window.Class = global.Class = function(fn) { return define(fn); };
+global.Class = function(fn) { return define(fn); };
 
 /**
  * Creates a public member of a Class.
@@ -52,7 +52,7 @@ window.Class = global.Class = function(fn) { return define(fn); };
  * @return  {Object}
  * @constructor
  */
-window.Public = global.Public = function Public(member) { return setVisibility(member); };
+global.Public = function Public(member) { return setVisibility(member); };
 
 /**
  * Creates a private member of a Class.
@@ -62,7 +62,7 @@ window.Public = global.Public = function Public(member) { return setVisibility(m
  * @return  {Object}
  * @constructor
  */
-window.Private = global.Private = function Private(member) { return setVisibility(member); };
+global.Private = function Private(member) { return setVisibility(member); };
 
 /**
  * Creates a protected member of a Class.
@@ -72,7 +72,7 @@ window.Private = global.Private = function Private(member) { return setVisibilit
  * @return  {Object}
  * @constructor
  */
-window.Protected = global.Protected = function Protected(member) { return setVisibility(member); };
+global.Protected = function Protected(member) { return setVisibility(member); };
 
 /**
  * Creates a static member of a Class.
@@ -82,7 +82,7 @@ window.Protected = global.Protected = function Protected(member) { return setVis
  * @return  {Object}
  * @constructor
  */
-window.Static = global.Static = function Static(member) { return setStatic(member); };
+global.Static = function Static(member) { return setStatic(member); };
 
 
 /***************************************
@@ -209,7 +209,7 @@ var define = function(fn, _super) {
 var dereference = function(source) {
     var target;
 
-    if (typeof source == 'object') {
+    if (typeof source == 'object' && source !== null) {
         target                          = (typeof source.length == 'number') ? [] : {};
 
         for (var i in source) {
@@ -271,5 +271,7 @@ var setStatic = function(member) {
     return member;
 };
 
-module.exports                          = global.Class;
-module.exports.BaseClass                = BaseClass;
+exports                                 = global.Class;
+exports.BaseClass                       = BaseClass;
+
+})(typeof exports == 'undefined' ? this['_Class'] = {} : exports);

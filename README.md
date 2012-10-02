@@ -49,7 +49,7 @@ Defines a public member for a class.
                     for all instances of the class and its children.
 
 ### Returns
-```PublicMember```
+```PublicMember```  A public member 
 
 ### Example
 ```javascript
@@ -66,7 +66,7 @@ Defines a protected member for a class.
                     all instances of the class and its children.
 
 ### Returns
-```ProtectedMember```
+```ProtectedMember```   A protected member
 
 ### Example
 ```javascript
@@ -83,7 +83,7 @@ Defines a private member for a class.
                     all instances of the class, but will be unavailable to its children.
 
 ### Returns
-```PrivateMember```
+```PrivateMember``` A private member
 
 ### Example
 ```javascript
