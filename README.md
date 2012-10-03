@@ -141,8 +141,8 @@ console.log(n.bar()); // => 'foo'
 Extends an existing non-Classical class.
 
 ### Parameters
+```ancestor```      The non-Classical class to inherit from.
 ```fn```            The definition of the class, represented as a function.
-```base```          The non-Classical class to inherit from.
 
 ### Example
 ```javascript
