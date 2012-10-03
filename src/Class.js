@@ -7,9 +7,9 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-02
+ * @edited      2012-10-03
  * @package     Libraries
- * @see         https://github.com/writh/classical
+ * @see         https://github.com/Writh/classical
  *
  * Copyright (C) 2012 Kevin Kragenbrink <kevin@writh.net>
  *
@@ -31,8 +31,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-(function(exports) {
-var version                             = '2.1.1';
+(function() {
+var version                             = '2.1.4';
 
 // Prevents shenanigans like loading classical twice.
 if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
@@ -51,6 +51,7 @@ if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
 if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
 if (typeof window == 'undefined') { window = global; }
+if (typeof module == 'undefined') { module = {}; }
 
 /**
  * Defines a new Class.
@@ -58,7 +59,7 @@ if (typeof window == 'undefined') { window = global; }
  * @global
  * @constructor
  */
-global.Class = function(fn) { return define(fn); };
+global.Class = function(fn) { return defineClass(fn); };
 
 /**
  * Defines a new Class using a non-Classical class as the baseclass.
@@ -67,6 +68,8 @@ global.Class = function(fn) { return define(fn); };
  * @constructor
  */
 global.Inherit = function(ancestor, fn) { return define(fn, undefined, ancestor); };
+
+global.Interface = function(fn) { return defineInterface(fn); };
 
 /**
  * Creates a public member of a Class.
@@ -126,7 +129,7 @@ var BaseClass                           = function BaseClass() {};
  * @constructor
  * @global
  */
-var define = function(fn, _super, ancestor) {
+var defineClass = function(fn, _super, ancestor) {
     var member;
     _super                              = _super || {};
 
@@ -313,7 +316,10 @@ var setStatic = function(member) {
     return member;
 };
 
-exports                                 = global.Class;
-exports.BaseClass                       = BaseClass;
-
-})(typeof exports == 'undefined' ? this['_Class'] = {} : exports);
+module.exports                          = global.Class;
+module.exports.Public                   = global.Public;
+module.exports.Private                  = global.Private;
+module.exports.Protected                = global.Protected;
+module.exports.Static                   = global.Static;
+module.exports.BaseClass                = BaseClass;
+})();
