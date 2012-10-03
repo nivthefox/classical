@@ -113,7 +113,7 @@ var Foo = Class(function() {
     });
 });
 var n   = new Foo;
-console.log(n.bar()); // => 'foo'
+console.log(n.foo()); // => 'foo'
 ```
 
 ## Extend
@@ -127,11 +127,31 @@ Extends an existing class
 
 ### Example
 ```javascript
-var Baz = Foo.extend(function() {
+var Bar = Foo.extend(function() {
+    this.bar = Public(function() {
+        return this.foo();
+    });
+});
+var n   = new Bar;
+console.log(n.bar()); // => 'foo'
+```
+
+
+## Inherit
+Extends an existing non-Classical class.
+
+### Parameters
+```fn```            The definition of the class, represented as a function.
+```base```          The non-Classical class to inherit from.
+
+### Example
+```javascript
+var Baz = Inherit(require('event').EventEmitter, function() {
     this.baz = Public(function() {
-        return this.bar();
+        this.emit('baz');
     });
 });
 var n   = new Baz;
-console.log(n.baz()); // => 'foo'
+n.on('baz', function() { console.log('foo') });
+n.baz(); // => 'foo'
 ```
