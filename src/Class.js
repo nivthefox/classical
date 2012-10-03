@@ -32,7 +32,7 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 (function(exports) {
-var version                             = '2.1.0';
+var version                             = '2.1.1';
 
 // Prevents shenanigans like loading classical twice.
 if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
@@ -66,7 +66,7 @@ global.Class = function(fn) { return define(fn); };
  * @global
  * @constructor
  */
-global.Inherit = function(base, fn) { return define(fn, undefined, base); };
+global.Inherit = function(ancestor, fn) { return define(fn, undefined, ancestor); };
 
 /**
  * Creates a public member of a Class.
@@ -121,39 +121,43 @@ var BaseClass                           = function BaseClass() {};
  *
  * @param   {Function}      fn
  * @param   {Object}        _super
- * @param   {Function}      _base
+ * @param   {Function}      ancestor
  * @return  {ClassFactory}
  * @constructor
  * @global
  */
-var define = function(fn, _super, _base) {
+var define = function(fn, _super, ancestor) {
     var member;
     _super                              = _super || {};
 
-    // Create a copy of the SuperClass to set the prototype.
-    initializing                        = true;
-    var InheritedPrototype              = typeof this == 'function' ? this : BaseClass;
-    var prototype                       = new InheritedPrototype;
-    initializing                        = false;
-
     // Get a _preInstance.
     var _preInstance                    = new fn;
-    var base                            = function() {};
-    base.prototype                      = prototype;
 
-    // Extend the _preInstance with members from _base, if any.
-    if (typeof _base != 'undefined') {
-        var _b                          = new _base;
-        for (member in _b) {
+    // Extend the _preInstance with members from the inheritted class, if any.
+    if (typeof ancestor == 'function') {
+        var AncestralClass              = new ancestor;
+        for (member in AncestralClass) {
             // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
             //          methods as its own properties. This creates a pretty big opening if
             //          someone foolishly modifies the Object prototype.
             if (typeof _preInstance[member] == 'undefined') {
-                _preInstance[member]    = Public(_b[member]);
+                _preInstance[member]    = Public(AncestralClass[member]);
             }
         }
-        console.log('', _b, _preInstance);
     }
+
+    // Create a copy of the SuperClass to set the prototype.
+    initializing                        = true;
+    var SuperClass                      = typeof this == 'function' ? this : BaseClass;
+    if (typeof ancestor == 'function') {
+        SuperClass.prototype            = AncestralClass;
+    }
+    var prototype                       = new SuperClass;
+    initializing                        = false;
+
+    // Establish a baseline prototype chain.
+    var base                            = function() {};
+    base.prototype                      = prototype;
 
     // Extend the _preInstance with the parent's members.
     for (member in _super) {
