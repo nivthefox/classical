@@ -1,4 +1,5 @@
  * Changelog:
+ *   - 2012-10-02: Added Inherit
  *   - 2012-09-28: Fixes for dereference method and handling of browser vs nodejs.
  *   - 2012-09-27: Complete rewrite to accomplish Public, Private, and Protected instances,
                    and to better handle method bindings. The need for method.call should be

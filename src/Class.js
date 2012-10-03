@@ -32,17 +32,13 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 (function(exports) {
-var version                             = '2.0.3';
+var version                             = '2.1.0';
 
-if (typeof global == 'undefined') { global = window; }
-if (typeof global == 'undefined') { global = {}; }
-if (typeof window == 'undefined') { window = global; }
-
-// Prevents loading classical twice.
+// Prevents shenanigans like loading classical twice.
 if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
     if (typeof process.versions.classical != 'undefined') {
         if (version !== process.versions.classical) {
-            console.error('Attempted to load classical %s, but version %s is already loaded.', version, process.versions.classical);
+            throw new Error('Attempted to load classical ' + version + ', but version ' + process.versions.classical + ' is already loaded.');
         }
 
         return;
@@ -52,6 +48,10 @@ if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
     }
 }
 
+if (typeof global == 'undefined') { global = window; }
+if (typeof global == 'undefined') { global = {}; }
+if (typeof window == 'undefined') { window = global; }
+
 /**
  * Defines a new Class.
  *
@@ -59,6 +59,14 @@ if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
  * @constructor
  */
 global.Class = function(fn) { return define(fn); };
+
+/**
+ * Defines a new Class using a non-Classical class as the baseclass.
+ *
+ * @global
+ * @constructor
+ */
+global.Inherit = function(base, fn) { return define(fn, undefined, base); };
 
 /**
  * Creates a public member of a Class.
@@ -100,7 +108,6 @@ global.Protected = function Protected(member) { return setVisibility(member); };
  */
 global.Static = function Static(member) { return setStatic(member); };
 
-
 /***************************************
  * INTERNALS
  *
@@ -114,11 +121,12 @@ var BaseClass                           = function BaseClass() {};
  *
  * @param   {Function}      fn
  * @param   {Object}        _super
+ * @param   {Function}      _base
  * @return  {ClassFactory}
  * @constructor
  * @global
  */
-var define = function(fn, _super) {
+var define = function(fn, _super, _base) {
     var member;
     _super                              = _super || {};
 
@@ -132,6 +140,20 @@ var define = function(fn, _super) {
     var _preInstance                    = new fn;
     var base                            = function() {};
     base.prototype                      = prototype;
+
+    // Extend the _preInstance with members from _base, if any.
+    if (typeof _base != 'undefined') {
+        var _b                          = new _base;
+        for (member in _b) {
+            // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
+            //          methods as its own properties. This creates a pretty big opening if
+            //          someone foolishly modifies the Object prototype.
+            if (typeof _preInstance[member] == 'undefined') {
+                _preInstance[member]    = Public(_b[member]);
+            }
+        }
+        console.log('', _b, _preInstance);
+    }
 
     // Extend the _preInstance with the parent's members.
     for (member in _super) {
