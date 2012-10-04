@@ -32,22 +32,6 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 (function() {
-var version                             = '2.1.4';
-
-// Prevents shenanigans like loading classical twice.
-if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
-    if (typeof process.versions.classical != 'undefined') {
-        if (version !== process.versions.classical) {
-            throw new Error('Attempted to load classical ' + version + ', but version ' + process.versions.classical + ' is already loaded.');
-        }
-
-        return;
-    }
-    else {
-        process.versions.classical      = version;
-    }
-}
-
 if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
 if (typeof window == 'undefined') { window = global; }
