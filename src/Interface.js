@@ -6,7 +6,7 @@
  *    \  /\  /| |  | | |_| | | |_| | | |  __/ |_
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
- * @created     2012-02-08
+ * @created     2012-10-03
  * @edited      2012-10-03
  * @package     Libraries
  * @see         https://github.com/Writh/classical
@@ -32,23 +32,42 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 (function() {
-var version                             = '2.1.4';
-
-// Prevents shenanigans like loading classical twice.
-if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
-    if (typeof process.versions.classical != 'undefined') {
-        if (version !== process.versions.classical) {
-            throw new Error('Attempted to load classical ' + version + ', but version ' + process.versions.classical + ' is already loaded.');
-        }
-
-        return;
-    }
-    else {
-        process.versions.classical      = version;
-    }
-}
-
+if (typeof global == 'undefined') { global = window; }
+if (typeof global == 'undefined') { global = {}; }
+if (typeof window == 'undefined') { window = global; }
 if (typeof module == 'undefined') { module = {}; }
-module.exports.Class                    = require('./src/Class');
-module.exports.Interface                = require('./src/Interface');
+
+/**
+ * Defines a new Interface.
+ *
+ * @global
+ * @constructor
+ */
+global.Interface = function(fn) { return defineInterface(fn); };
+
+/**
+ * Implements interfaces with a new class.
+ *
+ * @param interfaces
+ * @param fn
+ */
+global.Implement = function(interfaces, fn) { return implementInterfaces(interfaces, fn); };
+
+/***************************************
+ * INTERNALS
+ *
+ * The following code is not a part of the public API for Classical, and
+ * should not be altered or exposed to external scripts.
+ ***************************************/
+
+var defineInterface = function(fn) {
+
+};
+
+var implementInterfaces = function(interfaces, fn) {
+
+};
+
+module.exports                          = global.Interface;
+module.exports.BaseInterface            = Interface;
 })();
