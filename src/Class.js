@@ -120,8 +120,8 @@ var defineClass = function(fn, _super, ancestor) {
 
     // Extend the _preInstance with members from the inheritted class, if any.
     if (typeof ancestor == 'function') {
-        if (typeof ancestor._extend == 'function') {
-            return ancestor._extend(fn);
+        if (typeof ancestor._classical_extend == 'function') {
+            return ancestor._classical_extend(fn);
         }
         else {
             var AncestralClass          = new ancestor;
@@ -162,7 +162,7 @@ var defineClass = function(fn, _super, ancestor) {
     _preInstance._super                 = _super;
 
     // Set up the ClassFactory.  This is what actually gets instantiated.
-    var ClassFactory = function() {
+    var ClassFactory = function Class() {
         var _instance                   = new base;
         var _public                     = new base;
 
@@ -188,7 +188,7 @@ var defineClass = function(fn, _super, ancestor) {
 
     // Setup a method to extend the base class.
     var extend                          = arguments.callee;
-    ClassFactory._extend                = function(newfn) {
+    ClassFactory._classical_extend      = function(newfn) {
         return extend.call(ClassFactory, newfn, _preInstance);
     };
 
