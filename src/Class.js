@@ -67,9 +67,7 @@ global.Class = function(fn) { return defineClass(fn); };
  * @global
  * @constructor
  */
-global.Inherit = function(ancestor, fn) { return define(fn, undefined, ancestor); };
-
-global.Interface = function(fn) { return defineInterface(fn); };
+global.Extend = function(ancestor, fn) { return defineClass(fn, undefined, ancestor); };
 
 /**
  * Creates a public member of a Class.
@@ -138,13 +136,18 @@ var defineClass = function(fn, _super, ancestor) {
 
     // Extend the _preInstance with members from the inheritted class, if any.
     if (typeof ancestor == 'function') {
-        var AncestralClass              = new ancestor;
-        for (member in AncestralClass) {
-            // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
-            //          methods as its own properties. This creates a pretty big opening if
-            //          someone foolishly modifies the Object prototype.
-            if (typeof _preInstance[member] == 'undefined') {
-                _preInstance[member]    = Public(AncestralClass[member]);
+        if (typeof ancestor._extend == 'function') {
+            return ancestor._extend(fn);
+        }
+        else {
+            var AncestralClass          = new ancestor;
+            for (member in AncestralClass) {
+                // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
+                //          methods as its own properties. This creates a pretty big opening if
+                //          someone foolishly modifies the Object prototype.
+                if (typeof _preInstance[member] == 'undefined') {
+                    _preInstance[member]= Public(AncestralClass[member]);
+                }
             }
         }
     }
@@ -201,7 +204,7 @@ var defineClass = function(fn, _super, ancestor) {
 
     // Setup a method to extend the base class.
     var extend                          = arguments.callee;
-    ClassFactory.extend                 = function(newfn) {
+    ClassFactory._extend                = function(newfn) {
         return extend.call(ClassFactory, newfn, _preInstance);
     };
 
