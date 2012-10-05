@@ -21,7 +21,7 @@ var Mammal = Class(function() {
 
 ## Extension
 ```javascript
-var Dog = Mammal.extend(function() {
+var Dog = Extend(Mammal, function() {
     this.breed                          = Protected(null);
 
     this.constructor = Public(function(name, breed) {
@@ -115,30 +115,8 @@ var Foo = Class(function() {
 var n   = new Foo;
 console.log(n.foo()); // => 'foo'
 ```
-
 ## Extend
-Extends an existing class
-
-### Parameters
-```fn```            The definition of the class, represented as a function.
-
-### Returns
-```Class```         A factory to create instances of the class (using the new keyword)
-
-### Example
-```javascript
-var Bar = Foo.extend(function() {
-    this.bar = Public(function() {
-        return this.foo();
-    });
-});
-var n   = new Bar;
-console.log(n.bar()); // => 'foo'
-```
-
-
-## Inherit
-Extends an existing non-Classical class.
+Extends an existing Classical or non-Classical class.
 
 ### Parameters
 ```ancestor```      The non-Classical class to inherit from.
@@ -147,11 +125,54 @@ Extends an existing non-Classical class.
 ### Example
 ```javascript
 var Baz = Inherit(require('event').EventEmitter, function() {
+    this.constructor = Public(function() {
+        this.on('baz', this.qux);
+    });
+
     this.baz = Public(function() {
         this.emit('baz');
     });
+
+    this.qux = Private(function() {
+        console.log('foo');
+    });
 });
 var n   = new Baz;
-n.on('baz', function() { console.log('foo') });
 n.baz(); // => 'foo'
+```
+
+## Interface
+Creates a new interface to be implemented.
+
+### Parameters
+```fn```            The definition of the interface, represented as a function.
+
+### Example
+```javascript
+var Squee = Interface(function() {
+    this.moog = Public(function(ap) {}); // A public method with one argument.
+    this.dar = Protected(Class.BOOLEAN); // A protected boolean
+    this.han = Public(Class.INT); // A public integer
+    this.mik = Private(Class.STRING); // A private string
+});
+```
+
+## Implement
+Implements interfaces as a classical class.
+
+### Parameters
+```interfaces```    An interface (or several interfaces as an array).
+```fn```            The definition of the implementing class, represented as a function.
+
+### Example
+```javascript
+var Nop = Implement(Squee, function() {
+    this.moog = Public(function(ap) {
+        return Util.format(this.mik, ap, this.han, ap + this.han);
+    });
+
+    this.dar = Protected(true);
+    this.han = Public(4);
+    this.mik = Private("%s + %s = %s");
+});
 ```

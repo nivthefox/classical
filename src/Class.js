@@ -7,9 +7,9 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-02
+ * @edited      2012-10-05
  * @package     Libraries
- * @see         https://github.com/writh/classical
+ * @see         https://github.com/Writh/classical
  *
  * Copyright (C) 2012 Kevin Kragenbrink <kevin@writh.net>
  *
@@ -31,26 +31,11 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-(function(exports) {
-var version                             = '2.1.1';
-
-// Prevents shenanigans like loading classical twice.
-if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
-    if (typeof process.versions.classical != 'undefined') {
-        if (version !== process.versions.classical) {
-            throw new Error('Attempted to load classical ' + version + ', but version ' + process.versions.classical + ' is already loaded.');
-        }
-
-        return;
-    }
-    else {
-        process.versions.classical      = version;
-    }
-}
-
+(function() {
 if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
 if (typeof window == 'undefined') { window = global; }
+if (typeof module == 'undefined') { module = {}; }
 
 /**
  * Defines a new Class.
@@ -58,7 +43,7 @@ if (typeof window == 'undefined') { window = global; }
  * @global
  * @constructor
  */
-global.Class = function(fn) { return define(fn); };
+global.Class = function(fn) { return defineClass(fn); };
 
 /**
  * Defines a new Class using a non-Classical class as the baseclass.
@@ -66,7 +51,7 @@ global.Class = function(fn) { return define(fn); };
  * @global
  * @constructor
  */
-global.Inherit = function(ancestor, fn) { return define(fn, undefined, ancestor); };
+global.Extend = function(ancestor, fn) { return defineClass(fn, undefined, ancestor); };
 
 /**
  * Creates a public member of a Class.
@@ -126,7 +111,7 @@ var BaseClass                           = function BaseClass() {};
  * @constructor
  * @global
  */
-var define = function(fn, _super, ancestor) {
+var defineClass = function(fn, _super, ancestor) {
     var member;
     _super                              = _super || {};
 
@@ -135,13 +120,18 @@ var define = function(fn, _super, ancestor) {
 
     // Extend the _preInstance with members from the inheritted class, if any.
     if (typeof ancestor == 'function') {
-        var AncestralClass              = new ancestor;
-        for (member in AncestralClass) {
-            // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
-            //          methods as its own properties. This creates a pretty big opening if
-            //          someone foolishly modifies the Object prototype.
-            if (typeof _preInstance[member] == 'undefined') {
-                _preInstance[member]    = Public(AncestralClass[member]);
+        if (typeof ancestor._classical_extend == 'function') {
+            return ancestor._classical_extend(fn);
+        }
+        else {
+            var AncestralClass          = new ancestor;
+            for (member in AncestralClass) {
+                // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
+                //          methods as its own properties. This creates a pretty big opening if
+                //          someone foolishly modifies the Object prototype.
+                if (typeof _preInstance[member] == 'undefined') {
+                    _preInstance[member]= Public(AncestralClass[member]);
+                }
             }
         }
     }
@@ -159,7 +149,7 @@ var define = function(fn, _super, ancestor) {
     var base                            = function() {};
     base.prototype                      = prototype;
 
-    // Extend the _preInstance with the parent's members.
+    // Extend the _preInstance with the members from the SuperClass
     for (member in _super) {
         if (member != 'constructor' && _super.hasOwnProperty(member)) {
             if ((_super[member]._visibility == 'Public' || _super[member]._visibility == 'Protected') && typeof _preInstance[member] == 'undefined') {
@@ -171,8 +161,14 @@ var define = function(fn, _super, ancestor) {
     // Add the _super to the _preInstance, for construction and this._super purposes.
     _preInstance._super                 = _super;
 
+    return getClassFactory(base, prototype, _preInstance, arguments.callee);
+};
+
+var getClassFactory = function(base, prototype, _preInstance, extend) {
+    var member;
+
     // Set up the ClassFactory.  This is what actually gets instantiated.
-    var ClassFactory = function() {
+    var ClassFactory = function Class() {
         var _instance                   = new base;
         var _public                     = new base;
 
@@ -197,8 +193,7 @@ var define = function(fn, _super, ancestor) {
     }
 
     // Setup a method to extend the base class.
-    var extend                          = arguments.callee;
-    ClassFactory.extend                 = function(newfn) {
+    ClassFactory._classical_extend      = function(newfn) {
         return extend.call(ClassFactory, newfn, _preInstance);
     };
 
@@ -313,7 +308,12 @@ var setStatic = function(member) {
     return member;
 };
 
-exports                                 = global.Class;
-exports.BaseClass                       = BaseClass;
-
-})(typeof exports == 'undefined' ? this['_Class'] = {} : exports);
+module.exports                          = global.Class;
+module.exports.Public                   = global.Public;
+module.exports.Private                  = global.Private;
+module.exports.Protected                = global.Protected;
+module.exports.Static                   = global.Static;
+module.exports.BaseClass                = BaseClass;
+module.exports._classical_dc            = defineClass;
+module.exports._classical_gcf           = getClassFactory;
+})();
