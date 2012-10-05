@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-03
+ * @edited      2012-10-05
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -32,8 +32,34 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 (function() {
+var version                             = '2.2.0';
+
+// Prevents shenanigans like loading classical twice.
+if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
+    if (typeof process.versions.classical != 'undefined') {
+        if (version !== process.versions.classical) {
+            throw new Error('Attempted to load classical ' + version + ', but version ' + process.versions.classical + ' is already loaded.');
+        }
+
+        return;
+    }
+    else {
+        process.versions.classical      = version;
+    }
+}
 
 if (typeof module == 'undefined') { module = {}; }
 module.exports.Class                    = require('./src/Class');
+module.exports.Interface                = require('./src/Interface');
 
+// Types
+module.exports.BOOL                     = function BOOL(a) {return Boolean(a) === a};
+module.exports.INT                      = function INT(a) {return parseInt(a) === a};
+module.exports.FLOAT                    = function FLOAT(a) {return Number(a) === a};
+module.exports.STRING                   = function STRING(a) {return String(a) === a};
+module.exports.UNDEFINED                = function UNDEFINED(a,undefined) {return a === undefined};
+module.exports.NULL                     = function NULL(a) {return a === null};
+module.exports.OBJECT                   = function OBJECT(a) {return (typeof a == 'object' && Object.prototype.toString.call(a) == '[object Object]')};
+module.exports.ARRAY                    = function ARRAY(a) {return (typeof a == 'object' && Object.prototype.toString.call(a) == '[object Array]')};
+module.exports.FUNCTION                 = function ARRAY(a) {return typeof a == 'function'};
 })();

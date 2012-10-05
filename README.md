@@ -21,7 +21,7 @@ var Mammal = Class(function() {
 
 ## Extension
 ```javascript
-var Dog = Mammal.extend(function() {
+var Dog = Extend(Mammal, function() {
     this.breed                          = Protected(null);
 
     this.constructor = Public(function(name, breed) {
@@ -115,30 +115,8 @@ var Foo = Class(function() {
 var n   = new Foo;
 console.log(n.foo()); // => 'foo'
 ```
-
 ## Extend
-Extends an existing class
-
-### Parameters
-```fn```            The definition of the class, represented as a function.
-
-### Returns
-```Class```         A factory to create instances of the class (using the new keyword)
-
-### Example
-```javascript
-var Bar = Foo.extend(function() {
-    this.bar = Public(function() {
-        return this.foo();
-    });
-});
-var n   = new Bar;
-console.log(n.bar()); // => 'foo'
-```
-
-
-## Inherit
-Extends an existing non-Classical class.
+Extends an existing Classical or non-Classical class.
 
 ### Parameters
 ```ancestor```      The non-Classical class to inherit from.
