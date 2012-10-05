@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-03
+ * @edited      2012-10-05
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -149,7 +149,7 @@ var defineClass = function(fn, _super, ancestor) {
     var base                            = function() {};
     base.prototype                      = prototype;
 
-    // Extend the _preInstance with the parent's members.
+    // Extend the _preInstance with the members from the SuperClass
     for (member in _super) {
         if (member != 'constructor' && _super.hasOwnProperty(member)) {
             if ((_super[member]._visibility == 'Public' || _super[member]._visibility == 'Protected') && typeof _preInstance[member] == 'undefined') {
@@ -160,6 +160,12 @@ var defineClass = function(fn, _super, ancestor) {
 
     // Add the _super to the _preInstance, for construction and this._super purposes.
     _preInstance._super                 = _super;
+
+    return getClassFactory(base, prototype, _preInstance, arguments.callee);
+};
+
+var getClassFactory = function(base, prototype, _preInstance, extend) {
+    var member;
 
     // Set up the ClassFactory.  This is what actually gets instantiated.
     var ClassFactory = function Class() {
@@ -187,7 +193,6 @@ var defineClass = function(fn, _super, ancestor) {
     }
 
     // Setup a method to extend the base class.
-    var extend                          = arguments.callee;
     ClassFactory._classical_extend      = function(newfn) {
         return extend.call(ClassFactory, newfn, _preInstance);
     };
@@ -309,4 +314,6 @@ module.exports.Private                  = global.Private;
 module.exports.Protected                = global.Protected;
 module.exports.Static                   = global.Static;
 module.exports.BaseClass                = BaseClass;
+module.exports._classical_dc            = defineClass;
+module.exports._classical_gcf           = getClassFactory;
 })();
