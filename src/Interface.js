@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-10-03
- * @edited      2012-10-05
+ * @edited      2012-10-12
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -35,7 +35,6 @@ var Classical                           = require('../');
 (function() {
 if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
-if (typeof window == 'undefined') { window = global; }
 if (typeof module == 'undefined') { module = {}; }
 
 /**

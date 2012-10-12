@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-05
+ * @edited      2012-10-12
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -32,7 +32,7 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 (function() {
-var version                             = '2.2.0';
+var version                             = '2.2.1';
 
 // Prevents shenanigans like loading classical twice.
 if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
