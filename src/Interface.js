@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-10-03
- * @edited      2012-10-12
+ * @edited      2012-10-17
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -31,11 +31,27 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var Classical                           = require('../');
-(function() {
-if (typeof global == 'undefined') { global = window; }
-if (typeof global == 'undefined') { global = {}; }
-if (typeof module == 'undefined') { module = {}; }
+(function(global, module, undefined) {
+if (typeof global.Classical.Class == 'undefined') {throw new Error('Class.js must be required first.');}
+if (typeof module.exports == 'undefined') { module.exports = {}; }
+
+// Type validators.
+var Types                               = {};
+    Types.BOOL                          = function BOOL(a) {return Boolean(a) === a};
+    Types.INT                           = function INT(a) {return parseInt(a) === a};
+    Types.FLOAT                         = function FLOAT(a) {return parseFloat(a) === a};
+    Types.STRING                        = function STRING(a) {return String(a) === a};
+    Types.UNDEFINED                     = function UNDEFINED(a,undefined) {return a === undefined};
+    Types.NULL                          = function NULL(a) {return a === null};
+    Types.OBJECT                        = function OBJECT(a) {return (typeof a == 'object' && Object.prototype.toString.call(a) == '[object Object]')};
+    Types.ARRAY                         = function ARRAY(a) {return (typeof a == 'object' && Object.prototype.toString.call(a) == '[object Array]')};
+    Types.FUNCTION                      = function ARRAY(a) {return typeof a == 'function'};
+
+for (var i in Types) {
+    if (Types.hasOwnProperty(i)) {
+        module.exports[i]               = Types[i];
+    }
+}
 
 /**
  * Defines a new Interface.
@@ -43,7 +59,7 @@ if (typeof module == 'undefined') { module = {}; }
  * @global
  * @constructor
  */
-global.Interface = function(fn) { return defineInterface(fn); };
+module.exports.Interface = function(fn) { return defineInterface(fn); };
 
 /**
  * Implements interfaces with a new class.
@@ -51,7 +67,13 @@ global.Interface = function(fn) { return defineInterface(fn); };
  * @param interfaces
  * @param fn
  */
-global.Implement = function(interfaces, fn) { return implementInterfaces(interfaces, fn); };
+module.exports.Implement = function(interfaces, fn) { return implementInterfaces(interfaces, fn); };
+
+/**
+ * The base interface prototype.
+ * @constructor
+ */
+module.exports.BaseInterface            = function BaseInterface() {};
 
 /***************************************
  * INTERNALS
@@ -59,7 +81,7 @@ global.Implement = function(interfaces, fn) { return implementInterfaces(interfa
  * The following code is not a part of the public API for Classical, and
  * should not be altered or exposed to external scripts.
  ***************************************/
-var BaseInterface                       = function BaseInterface() {};
+var BaseInterface                       = module.exports.BaseInterface;
 
 var defineInterface = function(fn, _super) {
     var member;
@@ -127,15 +149,15 @@ var implementInterfaces = function(interfaces, fn) {
                 // Validate type.
                 if (iface.hasOwnProperty(member)) {
                     switch (iface[member]._value) {
-                        case Classical.BOOL:
-                        case Classical.INT:
-                        case Classical.FLOAT:
-                        case Classical.STRING:
-                        case Classical.UNDEFINED:
-                        case Classical.NULL:
-                        case Classical.OBJECT:
-                        case Classical.ARRAY:
-                        case Classical.FUNCTION:
+                        case Types.BOOL:
+                        case Types.INT:
+                        case Types.FLOAT:
+                        case Types.STRING:
+                        case Types.UNDEFINED:
+                        case Types.NULL:
+                        case Types.OBJECT:
+                        case Types.ARRAY:
+                        case Types.FUNCTION:
                             if(iface[member]._value(_preInstance[member]._value) !== true) {
                                 throw new TypeError('Member ' + member + ' expected ' + iface[member]._value.name + '.');
                             }
@@ -166,7 +188,7 @@ var implementInterfaces = function(interfaces, fn) {
         }
     }
 
-    return Class(fn);
+    return global.Classical.Class(fn);
 };
 
 /**
@@ -175,6 +197,15 @@ var implementInterfaces = function(interfaces, fn) {
  */
 var initializing                        = false;
 
-module.exports                          = global.Interface;
-module.exports.BaseInterface            = BaseInterface;
-})();
+// Set up the global Classical variables.
+global.Classical                    = global.Classical || {};
+global.Classical.Interface          = module.exports.Interface;
+global.Classical.Implement          = module.exports.Implement;
+global.Classical.type               = Types;
+
+// Register classical globals.
+if ((process && process.env && !process.env.CLASSICAL_PROTECTGLOBALS) || (window && !window.CLASSICAL_PROTECTGLOBALS)) {
+    global.Interface                    = global.Classical.Interface;
+    global.Implement                    = global.Classical.Implement;
+}
+})((global || window), (module || {}));

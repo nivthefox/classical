@@ -1,4 +1,6 @@
  * Changelog:
+ *   - 2012-10-17: Rearchitected how Classical affects Globals, and added an option to protect the global namespace.
+ *   - 2012-10-17: Moved TYPES to Interface, which actually uses them.
  *   - 2012-10-02: Added Inherit
  *   - 2012-09-28: Fixes for dereference method and handling of browser vs nodejs.
  *   - 2012-09-27: Complete rewrite to accomplish Public, Private, and Protected instances,
