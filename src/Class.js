@@ -319,6 +319,7 @@ global.Classical.Extend                 = module.exports.Extend;
 global.Classical.Public                 = module.exports.Public;
 global.Classical.Private                = module.exports.Private;
 global.Classical.Protected              = module.exports.Protected;
+global.Classical.Static                 = module.exports.Static;
 
 // Register classical globals.
 if ((process && process.env && !process.env.CLASSICAL_PROTECTGLOBALS) || (window && !window.CLASSICAL_PROTECTGLOBALS)) {
@@ -327,5 +328,6 @@ if ((process && process.env && !process.env.CLASSICAL_PROTECTGLOBALS) || (window
     global.Public                       = global.Classical.Public;
     global.Private                      = global.Classical.Private;
     global.Protected                    = global.Classical.Protected;
+    global.Static                       = global.Classical.Static;
 }
 })((global || window), (module || {}));
