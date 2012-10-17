@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-12
+ * @edited      2012-10-17
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -31,10 +31,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-(function() {
-if (typeof global == 'undefined') { global = window; }
-if (typeof global == 'undefined') { global = {}; }
-if (typeof module == 'undefined') { module = {}; }
+(function(global, module, undefined) {
+if (typeof module.exports == 'undefined') { module.exports = {}; }
 
 /**
  * Defines a new Class.
@@ -42,7 +40,7 @@ if (typeof module == 'undefined') { module = {}; }
  * @global
  * @constructor
  */
-global.Class = function(fn) { return defineClass(fn); };
+module.exports.Class = function(fn) { return defineClass(fn); };
 
 /**
  * Defines a new Class using a non-Classical class as the baseclass.
@@ -50,7 +48,7 @@ global.Class = function(fn) { return defineClass(fn); };
  * @global
  * @constructor
  */
-global.Extend = function(ancestor, fn) { return defineClass(fn, undefined, ancestor); };
+module.exports.Extend = function(ancestor, fn) { return defineClass(fn, undefined, ancestor); };
 
 /**
  * Creates a public member of a Class.
@@ -60,7 +58,7 @@ global.Extend = function(ancestor, fn) { return defineClass(fn, undefined, ances
  * @return  {Object}
  * @constructor
  */
-global.Public = function Public(member) { return setVisibility(member); };
+module.exports.Public = function Public(member) { return setVisibility(member); };
 
 /**
  * Creates a private member of a Class.
@@ -70,7 +68,7 @@ global.Public = function Public(member) { return setVisibility(member); };
  * @return  {Object}
  * @constructor
  */
-global.Private = function Private(member) { return setVisibility(member); };
+module.exports.Private = function Private(member) { return setVisibility(member); };
 
 /**
  * Creates a protected member of a Class.
@@ -80,7 +78,7 @@ global.Private = function Private(member) { return setVisibility(member); };
  * @return  {Object}
  * @constructor
  */
-global.Protected = function Protected(member) { return setVisibility(member); };
+module.exports.Protected = function Protected(member) { return setVisibility(member); };
 
 /**
  * Creates a static member of a Class.
@@ -90,7 +88,13 @@ global.Protected = function Protected(member) { return setVisibility(member); };
  * @return  {Object}
  * @constructor
  */
-global.Static = function Static(member) { return setStatic(member); };
+module.exports.Static = function Static(member) { return setStatic(member); };
+
+/**
+ * The base class prototype.
+ * @constructor
+ */
+module.exports.BaseClass = function BaseClass() {};
 
 /***************************************
  * INTERNALS
@@ -98,7 +102,7 @@ global.Static = function Static(member) { return setStatic(member); };
  * The following code is not a part of the public API for Classical, and
  * should not be altered or exposed to external scripts.
  ***************************************/
-var BaseClass                           = function BaseClass() {};
+var BaseClass                           = module.exports.BaseClass;
 
 /**
  * Implements Classical inheritance by wrapping prototypal inheritance.
@@ -307,12 +311,21 @@ var setStatic = function(member) {
     return member;
 };
 
-module.exports                          = global.Class;
-module.exports.Public                   = global.Public;
-module.exports.Private                  = global.Private;
-module.exports.Protected                = global.Protected;
-module.exports.Static                   = global.Static;
-module.exports.BaseClass                = BaseClass;
-module.exports._classical_dc            = defineClass;
-module.exports._classical_gcf           = getClassFactory;
-})();
+
+// Set up the global Classical variables.
+global.Classical                        = global.Classical || {};
+global.Classical.Class                  = module.exports.Class;
+global.Classical.Extend                 = module.exports.Extend;
+global.Classical.Public                 = module.exports.Public;
+global.Classical.Private                = module.exports.Private;
+global.Classical.Protected              = module.exports.Protected;
+
+// Register classical globals.
+if ((process && process.env && !process.env.CLASSICAL_PROTECTGLOBALS) || (window && !window.CLASSICAL_PROTECTGLOBALS)) {
+    global.Class                        = global.Classical.Class;
+    global.Extend                       = global.Classical.Extend;
+    global.Public                       = global.Classical.Public;
+    global.Private                      = global.Classical.Private;
+    global.Protected                    = global.Classical.Protected;
+}
+})((global || window), (module || {}));
