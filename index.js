@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var version                             = '2.2.3';
+var version                             = '2.2.4';
 
 // Prevents shenanigans like loading classical twice.
 if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
@@ -39,8 +39,6 @@ if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
         if (version !== process.versions.classical) {
             throw new Error('Attempted to load classical ' + version + ', but version ' + process.versions.classical + ' is already loaded.');
         }
-
-        return;
     }
     else {
         process.versions.classical      = version;
