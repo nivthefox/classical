@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-10-03
- * @edited      2012-10-17
+ * @edited      2012-10-23
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -31,6 +31,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
+var a = function(require, exports, module) {
+var global                              = global || window;
+var module                              = module || {};
+
 (function(global, module, undefined) {
 if (typeof global.Classical.Class == 'undefined') {throw new Error('Class.js must be required first.');}
 if (typeof module.exports == 'undefined') { module.exports = {}; }
@@ -204,8 +208,18 @@ global.Classical.Implement          = module.exports.Implement;
 global.Classical.type               = Types;
 
 // Register classical globals.
-if ((process && process.env && !process.env.CLASSICAL_PROTECTGLOBALS) || (window && !window.CLASSICAL_PROTECTGLOBALS)) {
+if (   (typeof process != 'undefined' && typeof process.env != 'undefined' && process.env.CLASSICAL_PROTECTGLOBALS !== true) 
+   ||  (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true)) {
     global.Interface                    = global.Classical.Interface;
     global.Implement                    = global.Classical.Implement;
 }
-})((global || window), (module || {}));
+return module.exports;
+})(global, module);
+};
+
+if (typeof window != 'undefined') {
+    define(a);
+}
+else {
+    module.exports = a(require, exports, module);
+}

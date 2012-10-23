@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-17
+ * @edited      2012-10-23
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -31,7 +31,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-(function(global, module, undefined) {
+var a = function(require, exports, module) {
+var global                              = global || window;
+function(global, module, undefined) {
 if (typeof module.exports == 'undefined') { module.exports = {}; }
 
 /**
@@ -322,7 +324,8 @@ global.Classical.Protected              = module.exports.Protected;
 global.Classical.Static                 = module.exports.Static;
 
 // Register classical globals.
-if ((process && process.env && !process.env.CLASSICAL_PROTECTGLOBALS) || (window && !window.CLASSICAL_PROTECTGLOBALS)) {
+if (   (typeof process != 'undefined' && typeof process.env != 'undefined' && process.env.CLASSICAL_PROTECTGLOBALS !== true) 
+   ||  (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true)) {
     global.Class                        = global.Classical.Class;
     global.Extend                       = global.Classical.Extend;
     global.Public                       = global.Classical.Public;
@@ -330,4 +333,13 @@ if ((process && process.env && !process.env.CLASSICAL_PROTECTGLOBALS) || (window
     global.Protected                    = global.Classical.Protected;
     global.Static                       = global.Classical.Static;
 }
-})((global || window), (module || {}));
+})(global, module);
+return module.exports;
+};
+
+if (typeof window != 'undefined') {
+    define(a);
+}
+else {
+    module.exports = a(require, exports, module);
+}
