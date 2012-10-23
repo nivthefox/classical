@@ -32,8 +32,8 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 var a = function(require, exports, module) {
-var global                              = global || window;
-function(global, module, undefined) {
+if (typeof global == 'undefined') { global = window; }
+if (typeof global == 'undefined') { global = {}; }
 if (typeof module.exports == 'undefined') { module.exports = {}; }
 
 /**
@@ -333,7 +333,7 @@ if (   (typeof process != 'undefined' && typeof process.env != 'undefined' && pr
     global.Protected                    = global.Classical.Protected;
     global.Static                       = global.Classical.Static;
 }
-})(global, module);
+
 return module.exports;
 };
 

@@ -50,7 +50,7 @@ var a = function(require, exports, module) {
     require('./src/Class');
     require('./src/Interface');
     return global.Classical;
-});
+};
 
 if (typeof window != 'undefined') {
     define(a);

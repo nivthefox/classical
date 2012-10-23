@@ -32,10 +32,8 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 var a = function(require, exports, module) {
-var global                              = global || window;
-var module                              = module || {};
-
-(function(global, module, undefined) {
+if (typeof global == 'undefined') { global = window; }
+if (typeof global == 'undefined') { global = {}; }
 if (typeof global.Classical.Class == 'undefined') {throw new Error('Class.js must be required first.');}
 if (typeof module.exports == 'undefined') { module.exports = {}; }
 
@@ -214,7 +212,6 @@ if (   (typeof process != 'undefined' && typeof process.env != 'undefined' && pr
     global.Implement                    = global.Classical.Implement;
 }
 return module.exports;
-})(global, module);
 };
 
 if (typeof window != 'undefined') {
