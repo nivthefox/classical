@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-17
+ * @edited      2012-10-23
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -31,20 +31,34 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var version                             = '2.2.4';
 
-// Prevents shenanigans like loading classical twice.
-if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
-    if (typeof process.versions.classical != 'undefined') {
-        if (version !== process.versions.classical) {
-            throw new Error('Attempted to load classical ' + version + ', but version ' + process.versions.classical + ' is already loaded.');
+var a = function(require) {
+    var version                             = '2.2.5';
+
+    // Prevents shenanigans like loading classical twice.
+    if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
+        if (typeof process.versions.classical != 'undefined') {
+            if (version !== process.versions.classical) {
+                throw new Error('Attempted to load classical ' + version + ', but version ' + process.versions.classical + ' is already loaded.');
+            }
+        }
+        else {
+            process.versions.classical      = version;
         }
     }
-    else {
-        process.versions.classical      = version;
+
+    if (typeof window == 'undefined') {
+        var Class                           = require('./src/Class');
+        var Interface                       = require('./src/Interface');
     }
+
+    return global.Classical;
+};
+
+if (typeof window != 'undefined') {
+    define(['require', 'Class', 'Interface'], a);
+}
+else {
+    module.exports = a(require, exports, module);
 }
 
-require('./src/Class');
-require('./src/Interface');
-module.exports                          = global.Classical;
