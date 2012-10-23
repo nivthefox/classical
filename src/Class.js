@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var a = function(require, exports, module) {
+var a = function(require, module) {
 if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
 if (typeof module.exports == 'undefined') { module.exports = {}; }
@@ -338,8 +338,8 @@ return module.exports;
 };
 
 if (typeof window != 'undefined') {
-    define(a);
+    define(['require', 'module'], a);
 }
 else {
-    module.exports = a(require, exports, module);
+    module.exports = a(require, module);
 }

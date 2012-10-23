@@ -31,10 +31,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var a = function(require, exports, module) {
+var a = function(require, module) {
 if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
-if (typeof global.Classical.Class == 'undefined') {throw new Error('Class.js must be required first.');}
+if (typeof global.Classical == 'undefined' || typeof global.Classical.Class == 'undefined') {throw new Error('Class.js must be required first.');}
 if (typeof module.exports == 'undefined') { module.exports = {}; }
 
 // Type validators.
@@ -215,8 +215,8 @@ return module.exports;
 };
 
 if (typeof window != 'undefined') {
-    define(a);
+    define(['require', 'module', 'Class'], a);
 }
 else {
-    module.exports = a(require, exports, module);
+    module.exports = a(require, module);
 }

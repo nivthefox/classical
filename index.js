@@ -59,6 +59,6 @@ if (typeof window != 'undefined') {
     define(['require', 'Class', 'Interface'], a);
 }
 else {
-    module.exports = a(require, exports, module);
+    module.exports = a(require);
 }
 
