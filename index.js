@@ -32,7 +32,7 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 
-var a = function(require, exports, module) {
+var a = function(require) {
     var version                             = '2.2.5';
 
     // Prevents shenanigans like loading classical twice.
@@ -47,14 +47,18 @@ var a = function(require, exports, module) {
         }
     }
 
-    require('./src/Class');
-    require('./src/Interface');
+    if (typeof window == 'undefined') {
+        var Class                           = require('./src/Class');
+        var Interface                       = require('./src/Interface');
+    }
+
     return global.Classical;
 };
 
 if (typeof window != 'undefined') {
-    define(a);
+    define(['require', 'Class', 'Interface'], a);
 }
 else {
     module.exports = a(require, exports, module);
 }
+
