@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-23
+ * @edited      2012-10-26
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -124,12 +124,13 @@ var defineClass = function(fn, _super, ancestor) {
     var _preInstance                    = new fn;
 
     // Extend the _preInstance with members from the inheritted class, if any.
-    if (typeof ancestor == 'function') {
+    if (typeof ancestor == 'function' || (typeof ancestor == 'object' && Object.prototype.toString.call(ancestor) == '[object Object]')) {
         if (typeof ancestor._classical_extend == 'function') {
             return ancestor._classical_extend(fn);
         }
         else {
-            var AncestralClass          = new ancestor;
+            var AncestralClass          = (typeof ancestor == 'function') ? new ancestor : ancestor;
+
             for (member in AncestralClass) {
                 // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
                 //          methods as its own properties. This creates a pretty big opening if

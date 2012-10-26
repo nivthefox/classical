@@ -1,4 +1,5 @@
  * Changelog:
+ *   - 2012-10-26: Allowed extension of object ancestors.
  *   - 2012-10-23: Adapted frontend to include require.js hooks (uncomment to activate).
  *   - 2012-10-19: Minor bug in init script was causing conflicts with require statements in nodejs.
  *   - 2012-10-17: Rearchitected how Classical affects Globals, and added an option to protect the global namespace.
