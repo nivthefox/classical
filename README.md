@@ -33,6 +33,7 @@ requirejs.config({
     },
     deps: ['Classical', 'Class', 'Interface']
 });
+```
 
 You can then use Classical as a normal requirement:
 
