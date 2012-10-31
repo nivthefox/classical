@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var a = function(require, module) {
+var c = function(require, module) {
 if (typeof global == 'undefined') { global = window; }
 if (typeof global == 'undefined') { global = {}; }
 if (typeof global.Classical == 'undefined' || typeof global.Classical.Class == 'undefined') {throw new Error('Class.js must be required first.');}
@@ -215,8 +215,8 @@ return module.exports;
 };
 
 if (typeof window != 'undefined') {
-    define(['require', 'module', 'Class'], a);
+    define(['require', 'module'], c);
 }
 else {
-    module.exports = a(require, module);
+    module.exports = c(require, module);
 }

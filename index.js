@@ -31,9 +31,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-
 var a = function(require) {
-    var version                             = '2.2.5';
+    var version                             = '2.2.8';
 
     // Prevents shenanigans like loading classical twice.
     if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
@@ -56,9 +55,8 @@ var a = function(require) {
 };
 
 if (typeof window != 'undefined') {
-    define(['require', 'Class', 'Interface'], a);
+    define(['require'], a);
 }
 else {
     module.exports = a(require);
 }
-

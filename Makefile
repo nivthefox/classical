@@ -1,39 +1,23 @@
-SRC				= src/
-INTERFACE		= qunit
-REPORTER		= json
-JSCOVERAGE		= /home/kevin/Applications/node-jscoverage/bin/jscoverage 
+SHELL			= /bin/bash
+YUICOMPRESS		= /usr/bin/yuicompressor
+FILES 			= index.js src/Class.js src/Interface.js
+GETVERSION	 	:= grep 'version' package.json | awk '{print substr($$3, 2, length($$3)-3)}'
 
-test:
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--ui $(INTERFACE) \
-		--reporter $(REPORTER) \
-		test
+clean:
+	if [[ -e index.min.js ]] ; then \
+		rm index.min.js ; \
+	fi
 
-test-spec:
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--ui $(INTERFACE) \
-		--reporter spec \
-		test
+minify: clean
+	for i in $(FILES) ; do \
+		$(YUICOMPRESS) --type js $$i >> index.min.js ; \
+	done
 
-test-watch:
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--watch \
-		--ui $(INTERFACE) \
-		--reporter $(REPORTER) \
-		test
+validate:
+	node .bin/validate.js
 
-coverage:
-	mkdir -p ./coverage/noop
-	rm -r ./coverage/*
-	cp -r fixtures ./coverage/fixtures
-	cp -r test ./coverage/test
-	$(JSCOVERAGE) src ./coverage/src
-	@NODE_ENV=test CLASSICAL_COV=1 ./node_modules/.bin/mocha \
-		--ui $(INTERFACE) \
-		--reporter html-cov \
-		./coverage/test > coverage.html
+package: validate minify
+	npm publish
+	bower register classical git://github.com/Writh/classical
 
-reporters:
-	./node_modules/.bin/mocha --reporters
-
-.PHONY: coverage reporters test test-spec test-watch
+.PHONY: clean minify package validate
