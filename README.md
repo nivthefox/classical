@@ -1,5 +1,74 @@
-# Classical
+Classical
+##################
 A simple cross-platform functional provider of classical inheritance for Javascript.
+
+# Including in your code
+## node.js
+```javascript
+require('classical')
+```
+
+Classical methods (Class, Extend, Public, etc.) will be placed in the global scope and can be used anywhere in your code.
+
+If you would prefer not to use Classical at the global level, you will need to set ```process.env.CLASSICAL_PROTECTGLOBALS```
+to ```true```, and then require classical in each class:
+
+```javascript
+var Classical = require('classical')
+```
+
+You can then use the classical variables as ```Classical.Class```, ```Classical.Extend```, ```Classical.Public```, etc.
+
+## browser (unminified, global scope)
+In the browser, Classical requires [require.js](http://requirejs.org/).
+
+You must configure your requirejs to know where Classical's methods are located:
+
+```javascript
+requirejs.config({
+    paths : {
+        Classical           : '/path/to/classical/index',
+        Class               : '/path/to/classical/src/Class',
+        Interface           : '/path/to/classical/src/Interface'
+    },
+    deps: ['Classical', 'Class', 'Interface']
+});
+
+You can then use Classical as a normal requirement:
+
+```javascript
+define(function() {
+    return Class(function() {});
+});
+```
+
+## browser (unminified, local scope)
+If you would prefer Classical not put itself at the window level, you will need to set ```window.CLASSICAL_PROTECTGLOBALS```
+to ```true``` before requiring Classical.
+
+You must still configure Classical the same way; however, there are some differences when using Classical later:
+
+```javascript
+define(['Classical'], function(Classical) {
+    return Classical.Class(function() {});
+});
+```
+
+## browser (minified, global scope)
+If you would like to use the minifed version of Classical, you must use a different requirejs config:
+
+```javascript
+requirejs.config({
+    paths : {
+        Classical           : '/path/to/classical/index.min.js'
+    },
+    deps: ['Classical']
+}
+```
+
+## browser (minified, local scope)
+You can also use the minified version of Classical without affecting the window.  This is done the same way as before,
+using the configuration for the minfied version.
 
 # Examples
 ## Creating a Class
