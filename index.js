@@ -45,6 +45,11 @@ var a = function(require) {
             process.versions.classical      = version;
         }
     }
+	
+	if( typeof global == 'undefined' )
+    {
+        global = window;
+    }
 
     if (typeof window == 'undefined') {
         var Class                           = require('./src/Class');
