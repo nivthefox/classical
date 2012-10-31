@@ -11,6 +11,7 @@ clean:
 minify: clean
 	for i in $(FILES) ; do \
 		$(YUICOMPRESS) --type js $$i >> index.min.js ; \
+		echo "" ; \
 	done
 
 validate:
