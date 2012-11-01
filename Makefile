@@ -17,7 +17,7 @@ minify: clean
 validate:
 	node .bin/validate.js
 
-package: validate minify
+package: validate
 	npm publish
 	bower register classical git://github.com/Writh/classical
 

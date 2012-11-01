@@ -56,6 +56,8 @@ define(['Classical'], function(Classical) {
 ```
 
 ## browser (minified, global scope)
+**Classical does not currently work in minified format**
+
 If you would like to use the minifed version of Classical, you must use a different requirejs config:
 
 ```javascript
@@ -68,6 +70,8 @@ requirejs.config({
 ```
 
 ## browser (minified, local scope)
+**Classical does not currently work in minified format**
+
 You can also use the minified version of Classical without affecting the window.  This is done the same way as before,
 using the configuration for the minfied version.
 
