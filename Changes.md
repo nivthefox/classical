@@ -1,4 +1,5 @@
  * Changelog:
+ *   - 2012-11-12: Members not given a visibility are now defaulted to public.
  *   - 2012-10-31: Added classical to bower.
  *   - 2012-10-31: Added a minified version.
  *   - 2012-10-31: Added instructions for browser usage.
