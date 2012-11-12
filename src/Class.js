@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-26
+ * @edited      2012-11-12
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -31,18 +31,14 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var b = function ( require, module )
-{
-    if( typeof global == 'undefined' )
-    {
+var b = function(require, module) {
+    if (typeof global == 'undefined') {
         global = window;
     }
-    if( typeof global == 'undefined' )
-    {
+    if (typeof global == 'undefined') {
         global = {};
     }
-    if( typeof module.exports == 'undefined' )
-    {
+    if (typeof module.exports == 'undefined') {
         module.exports = {};
     }
 
@@ -52,9 +48,8 @@ var b = function ( require, module )
      * @global
      * @constructor
      */
-    module.exports.Class = function ( fn )
-    {
-        return defineClass( fn );
+    module.exports.Class = function(fn) {
+        return defineClass(fn);
     };
 
     /**
@@ -63,9 +58,8 @@ var b = function ( require, module )
      * @global
      * @constructor
      */
-    module.exports.Extend = function ( ancestor, fn )
-    {
-        return defineClass( fn, undefined, ancestor );
+    module.exports.Extend = function(ancestor, fn) {
+        return defineClass(fn, undefined, ancestor);
     };
 
     /**
@@ -76,9 +70,8 @@ var b = function ( require, module )
      * @return  {Object}
      * @constructor
      */
-    module.exports.Public = function Public( member )
-    {
-        return setVisibility( member );
+    module.exports.Public = function Public(member) {
+        return setVisibility(member);
     };
 
     /**
@@ -89,9 +82,8 @@ var b = function ( require, module )
      * @return  {Object}
      * @constructor
      */
-    module.exports.Private = function Private( member )
-    {
-        return setVisibility( member );
+    module.exports.Private = function Private(member) {
+        return setVisibility(member);
     };
 
     /**
@@ -102,9 +94,8 @@ var b = function ( require, module )
      * @return  {Object}
      * @constructor
      */
-    module.exports.Protected = function Protected( member )
-    {
-        return setVisibility( member );
+    module.exports.Protected = function Protected(member) {
+        return setVisibility(member);
     };
 
     /**
@@ -115,17 +106,15 @@ var b = function ( require, module )
      * @return  {Object}
      * @constructor
      */
-    module.exports.Static = function Static( member )
-    {
-        return setStatic( member );
+    module.exports.Static = function Static(member) {
+        return setStatic(member);
     };
 
     /**
      * The base class prototype.
      * @constructor
      */
-    module.exports.BaseClass = function BaseClass()
-    {
+    module.exports.BaseClass = function BaseClass() {
     };
 
     /***************************************
@@ -146,8 +135,7 @@ var b = function ( require, module )
      * @constructor
      * @global
      */
-    var defineClass = function ( fn, _super, ancestor )
-    {
+    var defineClass = function(fn, _super, ancestor) {
         var member;
         _super = _super || {};
 
@@ -155,24 +143,19 @@ var b = function ( require, module )
         var _preInstance = new fn;
 
         // Extend the _preInstance with members from the inheritted class, if any.
-        if( typeof ancestor == 'function' || (typeof ancestor == 'object' && Object.prototype.toString.call( ancestor ) == '[object Object]') )
-        {
-            if( typeof ancestor._classical_extend == 'function' )
-            {
-                return ancestor._classical_extend( fn );
+        if (typeof ancestor == 'function' || (typeof ancestor == 'object' && Object.prototype.toString.call(ancestor) == '[object Object]')) {
+            if (typeof ancestor._classical_extend == 'function') {
+                return ancestor._classical_extend(fn);
             }
-            else
-            {
+            else {
                 var AncestralClass = (typeof ancestor == 'function') ? new ancestor : ancestor;
 
-                for( member in AncestralClass )
-                {
+                for (member in AncestralClass) {
                     // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
                     //          methods as its own properties. This creates a pretty big opening if
                     //          someone foolishly modifies the Object prototype.
-                    if( typeof _preInstance[member] == 'undefined' )
-                    {
-                        _preInstance[member] = Public( AncestralClass[member] );
+                    if (typeof _preInstance[member] == 'undefined') {
+                        _preInstance[member] = Public(AncestralClass[member]);
                     }
                 }
             }
@@ -181,26 +164,21 @@ var b = function ( require, module )
         // Create a copy of the SuperClass to set the prototype.
         initializing = true;
         var SuperClass = typeof this == 'function' ? this : BaseClass;
-        if( typeof ancestor == 'function' )
-        {
+        if (typeof ancestor == 'function') {
             SuperClass.prototype = AncestralClass;
         }
         var prototype = new SuperClass;
         initializing = false;
 
         // Establish a baseline prototype chain.
-        var base = function ()
-        {
+        var base = function() {
         };
         base.prototype = prototype;
 
         // Extend the _preInstance with the members from the SuperClass
-        for( member in _super )
-        {
-            if( member != 'constructor' && _super.hasOwnProperty( member ) )
-            {
-                if( (_super[member]._visibility == 'Public' || _super[member]._visibility == 'Protected') && typeof _preInstance[member] == 'undefined' )
-                {
+        for (member in _super) {
+            if (member != 'constructor' && _super.hasOwnProperty(member)) {
+                if ((_super[member]._visibility == 'Public' || _super[member]._visibility == 'Protected') && typeof _preInstance[member] == 'undefined') {
                     _preInstance[member] = _super[member];
                 }
             }
@@ -209,23 +187,20 @@ var b = function ( require, module )
         // Add the _super to the _preInstance, for construction and this._super purposes.
         _preInstance._super = _super;
 
-        return getClassFactory( base, prototype, _preInstance, arguments.callee );
+        return getClassFactory(base, prototype, _preInstance, arguments.callee);
     };
 
-    var getClassFactory = function ( base, prototype, _preInstance, extend )
-    {
+    var getClassFactory = function(base, prototype, _preInstance, extend) {
         var member;
 
         // Set up the ClassFactory.  This is what actually gets instantiated.
-        var ClassFactory = function Class()
-        {
+        var ClassFactory = function Class() {
             var _instance = new base;
             var _public = new base;
 
-            if( !initializing )
-            {
-                assemble( _instance, _instance, _public, _preInstance );
-                construct( _instance, _instance, arguments );
+            if (!initializing) {
+                assemble(_instance, _instance, _public, _preInstance);
+                construct(_instance, _instance, arguments);
             }
 
             return _public;
@@ -235,44 +210,39 @@ var b = function ( require, module )
         ClassFactory.prototype = prototype;
 
         // Set up static methods.
-        for( member in _preInstance )
-        {
-            if( _preInstance.hasOwnProperty( member ) )
-            {
-                if( _preInstance[member]._static === true && _preInstance[member]._visibility == 'Public' )
-                {
-                    ClassFactory[member] = copyValue( _preInstance[member]._value, ClassFactory, _preInstance[member]._static );
+        for (member in _preInstance) {
+            if (_preInstance.hasOwnProperty(member)) {
+                // While we're at it, let's also make sure visibility has been set.
+                if (!_preInstance[member].hasOwnProperty('_visibility')) {
+                    _preInstance[member] = Public(_preInstance[member]);
+                }
+
+                if (_preInstance[member]._static === true && _preInstance[member]._visibility == 'Public') {
+                    ClassFactory[member] = copyValue(_preInstance[member]._value, ClassFactory, _preInstance[member]._static);
                 }
             }
         }
 
         // Setup a method to extend the base class.
-        ClassFactory._classical_extend = function ( newfn )
-        {
-            return extend.call( ClassFactory, newfn, _preInstance );
+        ClassFactory._classical_extend = function(newfn) {
+            return extend.call(ClassFactory, newfn, _preInstance);
         };
 
         // Assembles the instance and its public accessors.
-        var assemble = function ( _context, _instance, _public, _preInstance )
-        {
+        var assemble = function(_context, _instance, _public, _preInstance) {
             var member;
 
-            if( typeof _preInstance._super != 'undefined' )
-            {
+            if (typeof _preInstance._super != 'undefined') {
                 _instance._super = new base;
-                assemble( _context, _instance._super, {}, _preInstance._super );
+                assemble(_context, _instance._super, {}, _preInstance._super);
             }
 
-            for( member in _preInstance )
-            {
-                if( member != '_super' && _preInstance.hasOwnProperty( member ) )
-                {
-                    if( _preInstance[member]._visibility != 'Private' || _context === _instance )
-                    {
-                        _instance[member] = copyValue( _preInstance[member]._value, _context, _preInstance[member]._static );
+            for (member in _preInstance) {
+                if (member != '_super' && _preInstance.hasOwnProperty(member)) {
+                    if (_preInstance[member]._visibility != 'Private' || _context === _instance) {
+                        _instance[member] = copyValue(_preInstance[member]._value, _context, _preInstance[member]._static);
 
-                        if( _preInstance[member]._visibility == 'Public' )
-                        {
+                        if (_preInstance[member]._visibility == 'Public') {
                             _public[member] = _instance[member];
                         }
                     }
@@ -283,18 +253,15 @@ var b = function ( require, module )
 
         // Recursively calls the constructors for the class, starting with the ancestor
         // and working towards the instance.
-        var construct = function ( context, target, arguments )
-        {
+        var construct = function(context, target, arguments) {
             // Call the SuperClass constructors first.
-            if( target._super instanceof BaseClass && target._super._super instanceof BaseClass )
-            {
-                construct( context, target._super, arguments );
+            if (target._super instanceof BaseClass && target._super._super instanceof BaseClass) {
+                construct(context, target._super, arguments);
             }
 
             // Call the instance constructor.
-            if( typeof target.constructor == 'function' && target.hasOwnProperty( 'constructor' ) )
-            {
-                target.constructor.apply( context, arguments );
+            if (typeof target.constructor == 'function' && target.hasOwnProperty('constructor')) {
+                target.constructor.apply(context, arguments);
             }
         };
 
@@ -307,24 +274,19 @@ var b = function ( require, module )
      * @param   {*}     source
      * @return  {*}
      */
-    var dereference = function ( source )
-    {
+    var dereference = function(source) {
         var target;
 
-        if( typeof source == 'object' && source !== null )
-        {
+        if (typeof source == 'object' && source !== null) {
             target = (typeof source.length == 'number') ? [] : {};
 
-            for( var i in source )
-            {
-                if( source.hasOwnProperty( i ) )
-                {
-                    target[i] = dereference( source[i] );
+            for (var i in source) {
+                if (source.hasOwnProperty(i)) {
+                    target[i] = dereference(source[i]);
                 }
             }
         }
-        else
-        {
+        else {
             target = source;
         }
 
@@ -345,15 +307,12 @@ var b = function ( require, module )
      * @param   {Boolean}   _static
      * @return  {*}
      */
-    var copyValue = function ( member, target, _static )
-    {
-        if( typeof member == 'function' )
-        {
-            return member.bind( target );
+    var copyValue = function(member, target, _static) {
+        if (typeof member == 'function') {
+            return member.bind(target);
         }
-        else
-        {
-            return (!_static ? dereference( member ) : member);
+        else {
+            return (!_static ? dereference(member) : member);
         }
     };
 
@@ -362,8 +321,7 @@ var b = function ( require, module )
      * @param   {*}         member
      * @return  {Object}
      */
-    var setVisibility = function ( member )
-    {
+    var setVisibility = function(member) {
         return {
             _value:member,
             _visibility:arguments.callee.caller.name,
@@ -376,13 +334,12 @@ var b = function ( require, module )
      * @param   {Object}    member
      * @return  {Object}
      */
-    var setStatic = function ( member )
-    {
+    var setStatic = function(member) {
         member._static = true;
         return member;
     };
 
-// Set up the global Classical variables.
+    // Set up the global Classical variables.
     global.Classical = global.Classical || {};
     global.Classical.Class = module.exports.Class;
     global.Classical.Extend = module.exports.Extend;
@@ -391,10 +348,9 @@ var b = function ( require, module )
     global.Classical.Protected = module.exports.Protected;
     global.Classical.Static = module.exports.Static;
 
-// Register classical globals.
-    if( (typeof process != 'undefined' && typeof process.env != 'undefined' && process.env.CLASSICAL_PROTECTGLOBALS !== true)
-        || (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true) )
-    {
+    // Register classical globals.
+    if ((typeof process != 'undefined' && typeof process.env != 'undefined' && process.env.CLASSICAL_PROTECTGLOBALS !== true)
+        || (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true)) {
         global.Class = global.Classical.Class;
         global.Extend = global.Classical.Extend;
         global.Public = global.Classical.Public;
@@ -406,11 +362,9 @@ var b = function ( require, module )
     return module.exports;
 };
 
-if( typeof window != 'undefined' )
-{
-    define( ['require', 'module'], b );
+if (typeof window != 'undefined') {
+    define(['require', 'module'], b);
 }
-else
-{
-    module.exports = b( require, module );
+else {
+    module.exports = b(require, module);
 }
