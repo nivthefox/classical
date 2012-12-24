@@ -31,8 +31,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var a = function(require) {
-    var version                             = '2.2.9';
+var a = function(global, require) {
+    var version                             = '2.2.10';
 
     // Prevents shenanigans like loading classical twice.
     if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
@@ -45,11 +45,6 @@ var a = function(require) {
             process.versions.classical      = version;
         }
     }
-	
-	if( typeof global == 'undefined' )
-    {
-        global = window;
-    }
 
     if (typeof window == 'undefined') {
         var Class                           = require('./src/Class');
@@ -60,8 +55,14 @@ var a = function(require) {
 };
 
 if (typeof window != 'undefined') {
-    define(['require'], a);
+    // requirejs
+    define(['require'], a.bind(this, window));
+}
+else if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
+    // nodejs
+    module.exports = a(global, require);
 }
 else {
-    module.exports = a(require);
+    // web workers
+    a(this, importScripts);
 }

@@ -31,9 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var c = function(require, module) {
-if (typeof global == 'undefined') { global = window; }
-if (typeof global == 'undefined') { global = {}; }
+var c = function(require, module, global) {
 if (typeof global.Classical == 'undefined' || typeof global.Classical.Class == 'undefined') {throw new Error('Class.js must be required first.');}
 if (typeof module.exports == 'undefined') { module.exports = {}; }
 
@@ -207,7 +205,8 @@ global.Classical.type               = Types;
 
 // Register classical globals.
 if (   (typeof process != 'undefined' && typeof process.env != 'undefined' && process.env.CLASSICAL_PROTECTGLOBALS !== true) 
-   ||  (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true)) {
+   ||  (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true)
+   ||  (typeof global != 'undefined' && global.CLASSICAL_PROTECTGLOBALS !== true)) {
     global.Interface                    = global.Classical.Interface;
     global.Implement                    = global.Classical.Implement;
 }
@@ -215,8 +214,14 @@ return module.exports;
 };
 
 if (typeof window != 'undefined') {
-    define(['require', 'module'], c);
+    // requirejs
+    define(['require', 'module'], c.bind(this, window));
+}
+else if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
+    // nodejs
+    module.exports = c(global, require, module);
 }
 else {
-    module.exports = c(require, module);
+    // web workers
+    c(this, null, this);
 }

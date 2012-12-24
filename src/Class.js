@@ -350,7 +350,8 @@ var b = function(require, module) {
 
     // Register classical globals.
     if ((typeof process != 'undefined' && typeof process.env != 'undefined' && process.env.CLASSICAL_PROTECTGLOBALS !== true)
-        || (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true)) {
+        ||  (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true)
+        ||  (typeof global != 'undefined' && global.CLASSICAL_PROTECTGLOBALS !== true)) {
         global.Class = global.Classical.Class;
         global.Extend = global.Classical.Extend;
         global.Public = global.Classical.Public;
@@ -362,9 +363,16 @@ var b = function(require, module) {
     return module.exports;
 };
 
+
 if (typeof window != 'undefined') {
-    define(['require', 'module'], b);
+    // requirejs
+    define(['require', 'module'], c.bind(this, window));
+}
+else if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
+    // nodejs
+    module.exports = c(global, require, module);
 }
 else {
-    module.exports = b(require, module);
+    // web workers
+    c(this, null, this);
 }
