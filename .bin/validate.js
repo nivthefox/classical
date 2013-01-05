@@ -14,5 +14,5 @@ if (scriptVersion !== expectedVersion) {
 	process.exit(1);
 }
 
-console.log('All versions up to date.');
+console.log('All versions are %s', expectedVersion);
 process.exit(0);
