@@ -7,11 +7,11 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-10-03
- * @edited      2012-10-23
+ * @edited      2013-01-04
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
- * Copyright (C) 2012 Kevin Kragenbrink <kevin@writh.net>
+ * Copyright (C) 2012-2013 Kevin Kragenbrink <kevin@writh.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var c = function(require, module, global) {
+var c = function(global, require, module) {
 if (typeof global.Classical == 'undefined' || typeof global.Classical.Class == 'undefined') {throw new Error('Class.js must be required first.');}
 if (typeof module.exports == 'undefined') { module.exports = {}; }
 
@@ -215,7 +215,7 @@ return module.exports;
 
 if (typeof window != 'undefined') {
     // requirejs
-    define(['require', 'module'], c.bind(this, window));
+    define([window, 'require', 'module'], c);
 }
 else if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
     // nodejs
