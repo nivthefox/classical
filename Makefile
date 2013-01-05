@@ -1,7 +1,6 @@
 SHELL			= /bin/bash
 YUICOMPRESS		= /usr/bin/yuicompressor
 FILES 			= index.js src/Class.js src/Interface.js
-GETVERSION	 	:= grep 'version' package.json | awk '{print substr($$3, 2, length($$3)-3)}'
 SRC				= src
 TESTS			= test
 INTERFACE		= qunit
@@ -15,7 +14,6 @@ clean:
 	rm -f index.min.js
 
 install: clean node_modules
-
 
 minify: clean
 	for i in $(FILES) ; do \
