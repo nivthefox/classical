@@ -5,12 +5,12 @@ require('../index');
 var scriptVersion						= process.versions.classical;
 
 if (componentVersion !== expectedVersion) {
-	console.error('Component.js has version %s, expected %s', componentVersion, expectedVersion);
+	console.error('component.json has version %s, expected %s', componentVersion, expectedVersion);
 	process.exit(1);
 }
 
 if (scriptVersion !== expectedVersion) {
-	console.error('Component.js has version %s, expected %s', componentVersion, expectedVersion);
+	console.error('index.js has version %s, expected %s', scriptVersion, expectedVersion);
 	process.exit(1);
 }
 
