@@ -5,6 +5,7 @@ suite('Class');
 
 var A;
 var B;
+var C;
 
 afterEach(function() {
     process.removeAllListeners();
@@ -94,7 +95,7 @@ test('Methods', function(done) {
     A.four();
 });
 
-test('Extending', function(done) {
+test('Extending Classes', function(done) {
     // Setup
     B                                   = require('./fixtures/B');
 
@@ -192,4 +193,50 @@ test('Extending', function(done) {
 
     Assert.ok(b instanceof B);
     Assert.ok(b instanceof A);
+});
+
+test('Extending Objects', function(done) {
+    // Setup
+    C                                   = require('./fixtures/C');
+
+    var tests = {
+        one                             : false,
+        two                             : false,
+        C                               : false
+    }
+    
+    process.on('ClassTest', function(called) {
+        tests[called]                   = true;
+
+        try {
+            Assert.deepEqual(tests, {
+                one                     : true,
+                two                     : true,
+                C                       : true
+            });
+            done();
+        }
+        catch(e) {};
+    });
+
+    process.on('test.one', function(val) { 
+        Assert.ok(val);
+        process.emit('ClassTest', 'one');
+    });
+
+
+    process.on('test.two', function(val) { 
+        Assert.ok(val);
+        process.emit('ClassTest', 'two');
+    });
+
+    process.on('C.one', function(val) {
+        Assert.ok(val);
+        process.emit('ClassTest', 'C');
+    });
+
+    // Execute
+    var c                               = new C;
+    c.one();
+    c.two();
 });

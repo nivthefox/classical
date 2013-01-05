@@ -121,19 +121,20 @@ var b = function(require, module) {
         var _preInstance                = new fn;
 
         // Extend the _preInstance with members from the inheritted class, if any.
-        if (typeof ancestor == 'function' || (typeof ancestor == 'object' 
-            && Object.prototype.toString.call(ancestor) == '[object Object]')) {
+        if (typeof ancestor == 'function' 
+            ||  (typeof ancestor == 'object' && Object.prototype.toString.call(ancestor) == '[object Object]')) {
             
             if (typeof ancestor._classical_extend == 'function') {
                 return ancestor._classical_extend(fn);
             }
             else {
-                var AncestralClass      = (typeof ancestor == 'function') ? new ancestor : ancestor;
+                var AncestralClass      = (typeof ancestor == 'function') ? new ancestor : dereference(ancestor);
 
                 for (member in AncestralClass) {
                     // WARNING: Not using hasOwnProperty here because Node EventEmitter does not have its
                     //          methods as its own properties. This creates a pretty big opening if
                     //          someone foolishly modifies the Object prototype.
+                    AncestralClass[member]                  = Public(AncestralClass[member]);
                     if (typeof _preInstance[member] == 'undefined') {
                         _preInstance[member]                = AncestralClass[member];
                     }
@@ -164,10 +165,13 @@ var b = function(require, module) {
                         _preInstance[member]                = _super[member];
                     }
                 }
-            }   
+            }
 
             // Add the _super to the _preInstance, for construction and this._super purposes.
-            _preInstance._super             = _super;
+            _preInstance._super         = _super;
+        }
+        else if (AncestralClass !== undefined) {
+            _preInstance._super         = AncestralClass;
         }
 
         return getClassFactory(base, prototype, _preInstance, arguments.callee);
@@ -230,7 +234,6 @@ var b = function(require, module) {
                             _public[member]                 = _instance[member];
                         }
                     }
-
                 }
             }
         };
