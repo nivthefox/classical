@@ -7,11 +7,11 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2012-10-23
+ * @edited      2012-01-04
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
- * Copyright (C) 2012 Kevin Kragenbrink <kevin@writh.net>
+ * Copyright (C) 2012-2013 Kevin Kragenbrink <kevin@writh.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -32,7 +32,7 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 var a = function(global, require) {
-    var version                             = '2.2.10';
+    var version                             = '2.2.11';
 
     // Prevents shenanigans like loading classical twice.
     if (typeof process != 'undefined' && typeof process.versions != 'undefined') {

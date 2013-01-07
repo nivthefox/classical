@@ -1,6 +1,6 @@
 {
     "name"                              : "classical",
-    "version"                           : "2.2.10",
+    "version"                           : "2.2.11",
     "description"                       : "Functional Classical Inheritance for Javascript",
     "keywords"                          : ["class", "inheritance"],
     "author"                            : "Kevin Kragenbrink <kevin@writh.net>",

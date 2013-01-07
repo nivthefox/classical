@@ -1,4 +1,5 @@
  * Changelog:
+ *   - 2013-01-04: Cleaned up numerous bugs and created unit tests to watch for regression.
  *   - 2012-12-24: Added support for WebWorkers.
  *   - 2012-11-12: Members not given a visibility are now defaulted to public.
  *   - 2012-10-31: Added classical to bower.
