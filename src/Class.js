@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2013-01-04
+ * @edited      2013-01-07
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.I
  */
-var b = function(require, module) {
+var b = function(global, require, module) {
     if (typeof module.exports == 'undefined') { module.exports = {}; }
 
     /**
@@ -121,9 +121,9 @@ var b = function(require, module) {
         var _preInstance                = new fn;
 
         // Extend the _preInstance with members from the inheritted class, if any.
-        if (typeof ancestor == 'function' 
+        if (typeof ancestor == 'function'
             ||  (typeof ancestor == 'object' && Object.prototype.toString.call(ancestor) == '[object Object]')) {
-            
+
             if (typeof ancestor._classical_extend == 'function') {
                 return ancestor._classical_extend(fn);
             }
@@ -159,9 +159,9 @@ var b = function(require, module) {
         if (_super !== undefined) {
             for (member in _super) {
                 if (member != 'constructor' && _super.hasOwnProperty(member)) {
-                    if ((_super[member]._visibility == 'Public' || _super[member]._visibility == 'Protected') 
+                    if ((_super[member]._visibility == 'Public' || _super[member]._visibility == 'Protected')
                         && typeof _preInstance[member] == 'undefined') {
-                        
+
                         _preInstance[member]                = _super[member];
                     }
                 }
@@ -227,7 +227,7 @@ var b = function(require, module) {
             for (member in _preInstance) {
                 if (member != '_super' && _preInstance.hasOwnProperty(member)) {
                     if (_preInstance[member]._visibility != 'Private' || _context === _instance) {
-                        _instance[member]                   = copyValue(_preInstance[member]._value, _context, 
+                        _instance[member]                   = copyValue(_preInstance[member]._value, _context,
                                                                         _preInstance[member]._static);
 
                         if (_preInstance[member]._visibility == 'Public') {

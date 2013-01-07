@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-10-03
- * @edited      2013-01-04
+ * @edited      2013-01-07
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -204,7 +204,7 @@ global.Classical.Implement          = module.exports.Implement;
 global.Classical.type               = Types;
 
 // Register classical globals.
-if (   (typeof process != 'undefined' && typeof process.env != 'undefined' && process.env.CLASSICAL_PROTECTGLOBALS !== true) 
+if (   (typeof process != 'undefined' && typeof process.env != 'undefined' && process.env.CLASSICAL_PROTECTGLOBALS !== true)
    ||  (typeof window != 'undefined' && window.CLASSICAL_PROTECTGLOBALS !== true)
    ||  (typeof global != 'undefined' && global.CLASSICAL_PROTECTGLOBALS !== true)) {
     global.Interface                    = global.Classical.Interface;
@@ -215,7 +215,7 @@ return module.exports;
 
 if (typeof window != 'undefined') {
     // requirejs
-    define([window, 'require', 'module'], c);
+    define(['require', 'module'], c.bind(this, window));
 }
 else if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
     // nodejs
