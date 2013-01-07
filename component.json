@@ -1,6 +1,6 @@
 {
     "name"                              : "classical",
-    "version"                           : "2.2.11",
+    "version"                           : "2.2.12",
     "main"                              : "./index",
     "dependencies" : {
         "requirejs"                     : "~2.1.1"

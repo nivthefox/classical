@@ -32,7 +32,7 @@
  * DEALINGS IN THE SOFTWARE.I
  */
 var a = function(global, require) {
-    var version                             = '2.2.11';
+    var version                             = '2.2.12';
 
     // Prevents shenanigans like loading classical twice.
     if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
