@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2013-01-07
+ * @edited      2013-01-10
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
