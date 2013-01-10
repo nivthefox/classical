@@ -353,7 +353,7 @@ var b = function(global, require, module) {
 
 if (typeof window != 'undefined') {
     // requirejs
-    define(['require', 'module'], b.bind(this, window));
+    define(['require', 'module', 'Classical'], b.bind(this, window));
 }
 else if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
     // nodejs

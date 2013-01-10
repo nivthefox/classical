@@ -215,7 +215,7 @@ return module.exports;
 
 if (typeof window != 'undefined') {
     // requirejs
-    define(['require', 'module'], c.bind(this, window));
+    define(['require', 'module', 'Classical', 'Class'], c.bind(this, window));
 }
 else if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
     // nodejs
