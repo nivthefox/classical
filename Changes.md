@@ -1,4 +1,5 @@
  * Changelog:
+ *   - 2013-01-16: Added a means for the _internal object to access the public interface.
  *   - 2013-01-10: Fixed browser-based order of operations issues.
  *   - 2013-01-04: Cleaned up numerous bugs and created unit tests to watch for regression.
  *   - 2012-12-24: Added support for WebWorkers.

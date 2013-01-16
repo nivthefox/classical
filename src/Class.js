@@ -7,7 +7,7 @@
  *     \/  \/ |_|  |_|\__|_| |_(_)_| |_|\___|\__|
  *
  * @created     2012-02-08
- * @edited      2013-01-10
+ * @edited      2013-01-16
  * @package     Libraries
  * @see         https://github.com/Writh/classical
  *
@@ -184,6 +184,8 @@ var b = function(global, require, module) {
         var ClassFactory = function Class() {
             var _instance               = new base;
             var _public                 = new base;
+
+            _instance.__classical_public= _public;
 
             if (!initializing) {
                 assemble(_instance, _instance, _public, _preInstance);
