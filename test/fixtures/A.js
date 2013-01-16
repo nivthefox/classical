@@ -20,6 +20,10 @@ var A = Class(function() {
 	this.four = Static(Public(function() {
 		process.emit('A.four', true);
 	}));
+
+    this.getPublicApi = Public(function() {
+        return this._classical_public;
+    });
 });
 
 module.exports = A;

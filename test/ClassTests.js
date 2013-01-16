@@ -240,3 +240,8 @@ test('Extending Objects', function(done) {
     c.one();
     c.two();
 });
+
+test('Accessing the public API', function() {
+    var a                               = new A;
+    Assert.deepEqual(a, a.getPublicApi());
+});

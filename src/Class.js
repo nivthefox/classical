@@ -185,7 +185,7 @@ var b = function(global, require, module) {
             var _instance               = new base;
             var _public                 = new base;
 
-            _instance.__classical_public= _public;
+            _instance._classical_public= _public;
 
             if (!initializing) {
                 assemble(_instance, _instance, _public, _preInstance);
