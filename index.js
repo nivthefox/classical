@@ -58,7 +58,7 @@ if (!Function.prototype.bind) {
 }
 
 var a = function(global, require) {
-    var version                             = '2.3.0';
+    var version                             = '2.3.1';
 
     // Prevents shenanigans like loading classical twice.
     if (typeof process != 'undefined' && typeof process.versions != 'undefined') {
