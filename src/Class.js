@@ -58,7 +58,7 @@ var b = function(global, require, module) {
      * @return  {Object}
      * @constructor
      */
-    module.exports.Public = function Public(member) { return setVisibility(member); };
+    module.exports.Public = function Public(member) { return setVisibility(member, 'Public'); };
 
     /**
      * Creates a private member of a Class.
@@ -68,7 +68,7 @@ var b = function(global, require, module) {
      * @return  {Object}
      * @constructor
      */
-    module.exports.Private = function Private(member) { return setVisibility(member); };
+    module.exports.Private = function Private(member) { return setVisibility(member, 'Private'); };
 
     /**
      * Creates a protected member of a Class.
@@ -78,7 +78,7 @@ var b = function(global, require, module) {
      * @return  {Object}
      * @constructor
      */
-    module.exports.Protected = function Protected(member) { return setVisibility(member); };
+    module.exports.Protected = function Protected(member) { return setVisibility(member, 'Protected'); };
 
     /**
      * Creates a static member of a Class.
@@ -310,10 +310,10 @@ var b = function(global, require, module) {
      * @param   {*}         member
      * @return  {Object}
      */
-    var setVisibility = function(member) {
+    var setVisibility = function(member, visibility) {
         return {
             _value                      : member,
-            _visibility                 : arguments.callee.caller.name,
+            _visibility                 : visibility,
             _static                     : false
         }
     };
