@@ -32,7 +32,7 @@ test('Methods', function(done) {
         two                             : false,
         three                           : false,
         four                            : false,
-        fourAgain                       : false,
+        fourAgain                       : false
     };
 
     process.on('ClassTest', function(called) {
@@ -49,7 +49,7 @@ test('Methods', function(done) {
                 two                     : true,
                 three                   : true,
                 four                    : true,
-                fourAgain               : true,
+                fourAgain               : true
             });
             done();
         }
@@ -105,12 +105,12 @@ test('Extending Classes', function(done) {
             one                         : false,
             two                         : false,
             three                       : false,
-            four                        : false,
+            four                        : false
         },
         b : {
              constructor                : false,
              three                      : false,
-             five                       : false,
+             five                       : false
         }
     };
 
@@ -124,12 +124,12 @@ test('Extending Classes', function(done) {
                     one                         : true,
                     two                         : true,
                     three                       : false,
-                    four                        : true,
+                    four                        : true
                 },
                 b : {
                      constructor                : true,
                      three                      : true,
-                     five                       : false,
+                     five                       : false
                 }
             });
             done();

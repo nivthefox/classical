@@ -40,7 +40,7 @@ var b = function(global, require, module) {
      * @global
      * @constructor
      */
-    module.exports.Class = function(fn) { return defineClass(fn); };
+    module.exports.Class = function(fn, prototype) { return defineClass(fn, undefined, undefined, prototype); };
 
     /**
      * Defines a new Class using a non-Classical class as the baseclass.
@@ -114,7 +114,7 @@ var b = function(global, require, module) {
      * @constructor
      * @global
      */
-    var defineClass = function(fn, _super, ancestor) {
+    var defineClass = function(fn, _super, ancestor, prototype) {
         var member;
 
         // Get a _preInstance.
@@ -128,6 +128,9 @@ var b = function(global, require, module) {
                 return ancestor._classical_extend(fn);
             }
             else {
+                if (typeof prototype == 'object' && Object.prototype.toString.call(prototype) == '[object Object]' && typeof ancestor == 'function') {
+                    ancestor.prototype  = prototype;
+                }
                 var AncestralClass      = (typeof ancestor == 'function') ? new ancestor : dereference(ancestor);
 
                 for (member in AncestralClass) {
@@ -148,7 +151,10 @@ var b = function(global, require, module) {
         if (typeof ancestor == 'function') {
             SuperClass.prototype        = AncestralClass;
         }
-        var prototype                   = new SuperClass;
+        else if (typeof prototype == 'object' && Object.prototype.toString.call(prototype) == '[object Object]') {
+            SuperClass.prototype        = prototype;
+        }
+        prototype                       = new SuperClass;
         initializing                    = false;
 
         // Establish a baseline prototype chain.

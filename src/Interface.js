@@ -133,16 +133,22 @@ var implementInterfaces = function(interfaces, fn) {
 
     // Get a _preInstance.
     var _preInstance                        = new fn;
+    var base                                = function () {};
+    var prototype                           = Object.prototype;
+    var iface;
 
     if (typeof interfaces != 'object' || Object.prototype.toString.call(interfaces) != '[object Array]') {
         interfaces                          = [interfaces];
     }
 
     for (var i in interfaces) {
+        var prechange                       = interfaces[i-1] || base;
         if (interfaces.hasOwnProperty(i)) {
+            interfaces[i].prototype         = prototype;
             initializing                    = true;
-            var iface = new interfaces[i];
+            iface                           = new interfaces[i];
             initializing                    = false;
+            prototype                       = iface;
 
             for (member in iface) {
 
@@ -187,8 +193,7 @@ var implementInterfaces = function(interfaces, fn) {
             }
         }
     }
-
-    return global.Classical.Class(fn);
+    return global.Classical.Class(fn, prototype);
 };
 
 /**
